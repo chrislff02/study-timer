@@ -1,0 +1,64 @@
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  text-align: center;
+}
+
+.app h1 {
+  font-size: 40px;
+  margin: 0;
+}
+
+.app p {
+  color: #9ca3af;
+  margin: 0;
+}
+
+.timer h2 {
+  font-size: 80px;
+  margin: 25px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.duration-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.duration-input input {
+  width: 160px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background-color: #1f2937;
+  color: white;
+  text-align: center;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.timer-controls button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.timer-controls button:hover {
+  background-color: #1d4ed8;
+}
