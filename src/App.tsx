@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
+const STORAGE_KEY = "study-timer-recent-durations";
+
 function App() {
   // Duration selected by the user (in minutes)
   const [duration, setDuration] = useState<number>(25);
@@ -13,6 +15,33 @@ function App() {
 
   // Stores the exact timestamp when the timer should finish
   const endTimeRef = useRef<number | null>(null);
+
+  // Load the four most recent study durations from localStorage
+  const [recentDurations, setRecentDurations] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+
+      if (!saved) return [];
+
+      const parsed: unknown = JSON.parse(saved);
+
+      if (!Array.isArray(parsed)) return [];
+
+      return [
+        ...new Set(
+          parsed.filter(
+            (value): value is number =>
+              typeof value === "number" &&
+              Number.isInteger(value) &&
+              value >= 1 &&
+              value <= 1440,
+          ),
+        ),
+      ].slice(0, 4);
+    } catch {
+      return [];
+    }
+  });
 
   // Countdown logic
   useEffect(() => {
@@ -40,9 +69,44 @@ function App() {
     return () => window.clearInterval(interval);
   }, [isRunning]);
 
+  // Save recent durations whenever the list changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentDurations));
+    } catch {
+      // Storage may be unavailable in some browser environments
+    }
+  }, [recentDurations]);
+
+  // Save recent durations whenever the list changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentDurations));
+    } catch {
+      // Storage may be unavailable in some browser environments
+    }
+  }, [recentDurations]);
+
+  // Remember a duration, keeping only the four most recent unique values
+  const saveRecentDuration = (minutes: number) => {
+    setRecentDurations((previous) => {
+      const updated = [
+        minutes,
+        ...previous.filter((value) => value !== minutes),
+      ];
+
+      return updated.slice(0, 4);
+    });
+  };
+
   // Start or resume the timer
   const handleStart = () => {
     if (isRunning || timeLeft <= 0) return;
+
+    // Only remember valid durations when starting a fresh session
+    if (timeLeft === duration * 60 && duration >= 1) {
+      saveRecentDuration(duration);
+    }
 
     endTimeRef.current = Date.now() + timeLeft * 1000;
     setIsRunning(true);
@@ -113,6 +177,26 @@ function App() {
           onChange={(e) => handleDurationChange(Number(e.target.value))}
         />
       </div>
+
+      {recentDurations.length > 0 && (
+        <div className="recent-durations">
+          <h3>Recent Durations</h3>
+
+          <div className="recent-buttons">
+            {recentDurations.map((minutes) => (
+              <button
+                key={minutes}
+                type="button"
+                disabled={isRunning}
+                onClick={() => handleDurationChange(minutes)}
+                className={duration === minutes ? "selected" : ""}
+              >
+                {minutes} min
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="timer-controls">
         <button onClick={handleStart} disabled={isRunning || timeLeft <= 0}>
