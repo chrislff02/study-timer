@@ -62,3 +62,13 @@
 .timer-controls button:hover {
   background-color: #1d4ed8;
 }
+
+.timer-controls button:disabled {
+  background-color: #374151;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.timer-controls button:disabled:hover {
+  background-color: #374151;
+}
