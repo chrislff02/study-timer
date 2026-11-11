@@ -3,7 +3,53 @@ import "./App.css";
 
 const STORAGE_KEY = "study-timer-recent-durations";
 
+// Play a short alarm using the Web Audio API
+const playAlarm = async (audioContext: AudioContext) => {
+  try {
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+
+    // Play three short tones
+    for (let i = 0; i < 3; i++) {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.value = 880;
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      const startTime = audioContext.currentTime + i * 0.35;
+
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.25);
+
+      oscillator.start(startTime);
+      oscillator.stop(startTime + 0.25);
+    }
+  } catch (error) {
+    console.error("Unable to play alarm:", error);
+  }
+};
+
 function App() {
+  // Tracks whether a study session has finished
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+
+  // Allows the user to enable or disable the alarm
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+
+  // Keep track of the latest sound preference
+  const soundEnabledRef = useRef(soundEnabled);
+
+  // Update the ref whenever the sound preference changes
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
+
   // Duration selected by the user (in minutes)
   const [duration, setDuration] = useState<number>(25);
 
@@ -15,6 +61,9 @@ function App() {
 
   // Stores the exact timestamp when the timer should finish
   const endTimeRef = useRef<number | null>(null);
+
+  // Stores the audio context between renders
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   // Load the four most recent study durations from localStorage
   const [recentDurations, setRecentDurations] = useState<number[]>(() => {
@@ -58,9 +107,9 @@ function App() {
 
       setTimeLeft(remaining);
 
-      // Stop automatically when the timer reaches zero
       if (remaining === 0) {
         setIsRunning(false);
+        setIsComplete(true);
         endTimeRef.current = null;
       }
     }, 250);
@@ -69,14 +118,14 @@ function App() {
     return () => window.clearInterval(interval);
   }, [isRunning]);
 
-  // Save recent durations whenever the list changes
+  // Play the alarm once when the session finishes
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(recentDurations));
-    } catch {
-      // Storage may be unavailable in some browser environments
+    if (!isComplete) return;
+
+    if (soundEnabledRef.current && audioContextRef.current) {
+      void playAlarm(audioContextRef.current);
     }
-  }, [recentDurations]);
+  }, [isComplete]);
 
   // Save recent durations whenever the list changes
   useEffect(() => {
@@ -86,6 +135,15 @@ function App() {
       // Storage may be unavailable in some browser environments
     }
   }, [recentDurations]);
+
+  // Update the browser tab title when the timer finishes
+  useEffect(() => {
+    document.title = isComplete ? "⏰ Study Session Complete!" : "Study Timer";
+
+    return () => {
+      document.title = "Study Timer";
+    };
+  }, [isComplete]);
 
   // Remember a duration, keeping only the four most recent unique values
   const saveRecentDuration = (minutes: number) => {
@@ -99,14 +157,31 @@ function App() {
     });
   };
 
-  // Start or resume the timer
+  // Prepare audio when the user interacts with the timer
+  const prepareAudio = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    if (audioContextRef.current.state === "suspended") {
+      void audioContextRef.current.resume().catch(console.error);
+    }
+  };
+
   const handleStart = () => {
     if (isRunning || timeLeft <= 0) return;
 
-    // Only remember valid durations when starting a fresh session
+    // Prepare audio after the user clicks Start
+    if (soundEnabled) {
+      prepareAudio();
+    }
+
+    // Save new study durations
     if (timeLeft === duration * 60 && duration >= 1) {
       saveRecentDuration(duration);
     }
+
+    setIsComplete(false);
 
     endTimeRef.current = Date.now() + timeLeft * 1000;
     setIsRunning(true);
@@ -126,14 +201,13 @@ function App() {
     setIsRunning(false);
   };
 
-  // Reset the timer to the selected duration
   const handleReset = () => {
     setIsRunning(false);
+    setIsComplete(false);
     endTimeRef.current = null;
     setTimeLeft(duration * 60);
   };
 
-  // Update the duration and reset the countdown
   const handleDurationChange = (value: number) => {
     const validDuration = Number.isFinite(value)
       ? Math.max(0, Math.min(1440, Math.trunc(value)))
@@ -142,6 +216,7 @@ function App() {
     setDuration(validDuration);
     setTimeLeft(validDuration * 60);
     setIsRunning(false);
+    setIsComplete(false);
     endTimeRef.current = null;
   };
 
@@ -155,14 +230,67 @@ function App() {
       .padStart(2, "0")}`;
   };
 
+  // Calculate the percentage of time remaining
+  const totalSeconds = duration * 60;
+
+  const progress = totalSeconds > 0 ? (timeLeft / totalSeconds) * 100 : 0;
+
+  // Change the timer color based on remaining time
+  const getTimerColor = () => {
+    if (progress > 50) return "#22c55e"; // Green
+    if (progress > 15) return "#eab308"; // Yellow
+    return "#ef4444"; // Red
+  };
+
+  const timerColor = getTimerColor();
+
+  // Calculate the circular progress indicator
+  const radius = 90;
+  const circumference = 2 * Math.PI * radius;
+
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+
   return (
     <div className="app">
       <h1>Study Timer</h1>
       <p>Stay focused, one session at a time.</p>
 
       <div className="timer">
-        <h2>{formatTime(timeLeft)}</h2>
+        <div className="timer-circle">
+          <svg className="progress-ring" viewBox="0 0 220 220">
+            {/* Background circle */}
+            <circle
+              className="progress-ring-background"
+              cx="110"
+              cy="110"
+              r={radius}
+            />
+
+            {/* Colored progress circle */}
+            <circle
+              className="progress-ring-progress"
+              cx="110"
+              cy="110"
+              r={radius}
+              stroke={timerColor}
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+            />
+          </svg>
+
+          <div className="timer-display">
+            <h2>{formatTime(timeLeft)}</h2>
+            <span>{Math.round(progress)}% remaining</span>
+          </div>
+        </div>
       </div>
+
+      {isComplete && (
+        <div className="completion-message" role="status">
+          <h3>Study Session Complete!</h3>
+          <p>Great work! Your study session has finished.</p>
+        </div>
+      )}
 
       <div className="duration-input">
         <label htmlFor="duration">Study Duration (minutes)</label>
@@ -208,6 +336,16 @@ function App() {
         </button>
 
         <button onClick={handleReset}>Reset</button>
+      </div>
+      <div className="sound-settings">
+        <label>
+          <input
+            type="checkbox"
+            checked={soundEnabled}
+            onChange={(e) => setSoundEnabled(e.target.checked)}
+          />
+          Enable completion sound
+        </label>
       </div>
     </div>
   );

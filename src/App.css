@@ -120,3 +120,104 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Completion notification */
+.completion-message {
+  padding: 16px 24px;
+  border: 1px solid #22c55e;
+  border-radius: 12px;
+  background-color: #14532d;
+  text-align: center;
+}
+
+.completion-message h3 {
+  margin: 0 0 8px;
+  color: #86efac;
+  font-size: 20px;
+}
+
+.completion-message p {
+  margin: 0;
+  color: #dcfce7;
+  font-size: 14px;
+}
+
+/* Sound toggle */
+.sound-settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sound-settings label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.sound-settings input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+/* Circular timer container */
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer-circle {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  max-width: 85vw;
+  max-height: 85vw;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-background {
+  fill: none;
+  stroke: #374151;
+  stroke-width: 10;
+}
+
+.progress-ring-progress {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition:
+    stroke-dashoffset 0.25s linear,
+    stroke 0.3s ease;
+}
+
+.timer-display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-display h2 {
+  font-size: clamp(38px, 7vw, 60px);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-display span {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-top: 8px;
+}
