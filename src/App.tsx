@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 const STORAGE_KEY = "study-timer-recent-durations";
+const SOUND_STORAGE_KEY = "study-timer-sound-enabled";
 
 // Play a short alarm using the Web Audio API
 const playAlarm = async (audioContext: AudioContext) => {
@@ -39,8 +40,17 @@ function App() {
   // Tracks whether a study session has finished
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
-  // Allows the user to enable or disable the alarm
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  // Load the saved sound preference when the application starts
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem(SOUND_STORAGE_KEY);
+
+      // Enable sound by default if no preference exists
+      return saved === null ? true : saved === "true";
+    } catch {
+      return true;
+    }
+  });
 
   // Keep track of the latest sound preference
   const soundEnabledRef = useRef(soundEnabled);
@@ -136,6 +146,15 @@ function App() {
     }
   }, [recentDurations]);
 
+  // Save sound preference whenever the user changes it
+  useEffect(() => {
+    try {
+      localStorage.setItem(SOUND_STORAGE_KEY, String(soundEnabled));
+    } catch {
+      // Storage may be unavailable in some browser environments
+    }
+  }, [soundEnabled]);
+
   // Update the browser tab title when the timer finishes
   useEffect(() => {
     document.title = isComplete ? "⏰ Study Session Complete!" : "Study Timer";
@@ -156,6 +175,9 @@ function App() {
       return updated.slice(0, 4);
     });
   };
+
+  // Stores what the user is currently typing
+  const [durationInput, setDurationInput] = useState<string>("25");
 
   // Prepare audio when the user interacts with the timer
   const prepareAudio = () => {
@@ -208,16 +230,37 @@ function App() {
     setTimeLeft(duration * 60);
   };
 
+  // Apply a valid duration to the timer
   const handleDurationChange = (value: number) => {
-    const validDuration = Number.isFinite(value)
-      ? Math.max(0, Math.min(1440, Math.trunc(value)))
-      : 0;
+    if (!Number.isInteger(value) || value < 1 || value > 1440) {
+      return;
+    }
 
-    setDuration(validDuration);
-    setTimeLeft(validDuration * 60);
+    setDuration(value);
+    setDurationInput(String(value));
+    setTimeLeft(value * 60);
     setIsRunning(false);
     setIsComplete(false);
     endTimeRef.current = null;
+  };
+
+  // Validate and apply the duration entered by the user
+  const handleDurationSubmit = () => {
+    const trimmed = durationInput.trim();
+    const value = Number(trimmed);
+
+    if (
+      trimmed === "" ||
+      !Number.isInteger(value) ||
+      value < 1 ||
+      value > 1440
+    ) {
+      // Restore the last valid duration
+      setDurationInput(String(duration));
+      return;
+    }
+
+    handleDurationChange(value);
   };
 
   // Convert seconds into MM:SS format
@@ -300,9 +343,16 @@ function App() {
           type="number"
           min="1"
           max="1440"
-          value={duration}
+          step="1"
+          value={durationInput}
           disabled={isRunning}
-          onChange={(e) => handleDurationChange(Number(e.target.value))}
+          onChange={(e) => setDurationInput(e.target.value)}
+          onBlur={handleDurationSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.currentTarget.blur();
+            }
+          }}
         />
       </div>
 
