@@ -191,21 +191,53 @@ function App() {
   };
 
   const handleStart = () => {
-    if (isRunning || timeLeft <= 0) return;
+    if (isRunning) return;
+
+    // Check whether the user typed a new duration
+    const trimmed = durationInput.trim();
+    const enteredDuration = Number(trimmed);
+
+    const isValidInput =
+      trimmed !== "" &&
+      Number.isInteger(enteredDuration) &&
+      enteredDuration >= 1 &&
+      enteredDuration <= 1440;
+
+    // Reject invalid input and restore the previous duration
+    if (!isValidInput) {
+      setDurationInput(String(duration));
+      return;
+    }
+
+    // Determine whether this is a newly selected duration
+    const hasNewDuration = enteredDuration !== duration;
+
+    // Use the newly entered duration, or resume the existing timer
+    const startingSeconds = hasNewDuration ? enteredDuration * 60 : timeLeft;
+
+    if (startingSeconds <= 0) return;
+
+    // Apply the new duration if it changed
+    if (hasNewDuration) {
+      setDuration(enteredDuration);
+      setTimeLeft(startingSeconds);
+      setIsComplete(false);
+    }
 
     // Prepare audio after the user clicks Start
     if (soundEnabled) {
       prepareAudio();
     }
 
-    // Save new study durations
-    if (timeLeft === duration * 60 && duration >= 1) {
-      saveRecentDuration(duration);
+    // Remember the duration when starting a fresh session
+    if (hasNewDuration || startingSeconds === enteredDuration * 60) {
+      saveRecentDuration(enteredDuration);
     }
 
     setIsComplete(false);
 
-    endTimeRef.current = Date.now() + timeLeft * 1000;
+    // Store the exact time when the countdown should finish
+    endTimeRef.current = Date.now() + startingSeconds * 1000;
     setIsRunning(true);
   };
 
@@ -377,7 +409,13 @@ function App() {
       )}
 
       <div className="timer-controls">
-        <button onClick={handleStart} disabled={isRunning || timeLeft <= 0}>
+        <button
+          onClick={handleStart}
+          disabled={
+            isRunning || (timeLeft <= 0 && durationInput === String(duration))
+          }
+        >
+          {" "}
           {timeLeft < duration * 60 && timeLeft > 0 ? "Resume" : "Start"}
         </button>
 
