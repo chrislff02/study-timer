@@ -2,182 +2,77 @@
   min-height: 100vh;
 }
 
+/* Main application layout */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 24px;
-  text-align: center;
+  padding: 40px 20px;
+  gap: 24px;
 }
 
-.app h1 {
-  font-size: 40px;
-  margin: 0;
+/* Main timer card */
+.timer-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 32px;
+  background-color: #111827;
+  border: 1px solid #263244;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-.app p {
-  color: #9ca3af;
-  margin: 0;
-}
-
-.timer h2 {
-  font-size: 80px;
-  margin: 25px 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.duration-input {
+/* Header */
+.app-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
 }
 
-.duration-input input {
-  width: 160px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #374151;
-  background-color: #1f2937;
-  color: white;
-  text-align: center;
-}
-
-.timer-controls {
+.header-icon {
   display: flex;
-  gap: 12px;
-}
-
-.timer-controls button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  background-color: #2563eb;
-  color: white;
-  cursor: pointer;
-}
-
-.timer-controls button:hover {
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   background-color: #1d4ed8;
-}
-
-.timer-controls button:disabled {
-  background-color: #374151;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
-.timer-controls button:disabled:hover {
-  background-color: #374151;
-}
-
-/* Recent study durations */
-.recent-durations {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.recent-durations h3 {
-  font-size: 16px;
-  font-weight: 500;
-  color: #9ca3af;
-  margin: 0;
-}
-
-.recent-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
-.recent-buttons button {
-  padding: 10px 18px;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  background-color: #1f2937;
-  color: #f9fafb;
-  cursor: pointer;
-  transition:
-    background-color 0.2s,
-    border-color 0.2s;
-}
-
-.recent-buttons button:hover:not(:disabled) {
-  background-color: #374151;
-}
-
-.recent-buttons button.selected {
-  border-color: #3b82f6;
-  background-color: #1e3a8a;
-}
-
-.recent-buttons button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Completion notification */
-.completion-message {
-  padding: 16px 24px;
-  border: 1px solid #22c55e;
   border-radius: 12px;
-  background-color: #14532d;
-  text-align: center;
+  font-size: 24px;
 }
 
-.completion-message h3 {
-  margin: 0 0 8px;
-  color: #86efac;
-  font-size: 20px;
-}
-
-.completion-message p {
+.header-text h1 {
   margin: 0;
-  color: #dcfce7;
-  font-size: 14px;
+  font-size: 24px;
+  color: #f9fafb;
 }
 
-/* Sound toggle */
-.sound-settings {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.header-text p {
+  margin: 5px 0 0;
+  color: #94a3b8;
+  font-size: 13px;
 }
 
-.sound-settings label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  color: #d1d5db;
-  font-size: 14px;
+.header-divider {
+  height: 1px;
+  background-color: #263244;
+  margin: 24px 0;
 }
 
-.sound-settings input {
-  width: 18px;
-  height: 18px;
-  accent-color: #2563eb;
-  cursor: pointer;
-}
-
-/* Circular timer container */
+/* Timer */
 .timer {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .timer-circle {
   position: relative;
-  width: 320px;
-  height: 320px;
-  max-width: 85vw;
-  max-height: 85vw;
+  width: 300px;
+  height: 300px;
+  max-width: 100%;
+  aspect-ratio: 1;
 }
 
 .progress-ring {
@@ -188,7 +83,7 @@
 
 .progress-ring-background {
   fill: none;
-  stroke: #374151;
+  stroke: #263244;
   stroke-width: 10;
 }
 
@@ -211,13 +106,249 @@
 }
 
 .timer-display h2 {
-  font-size: clamp(38px, 7vw, 60px);
-  margin: 0;
+  font-size: clamp(40px, 8vw, 56px);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
+  margin: 0;
+  color: #f9fafb;
 }
 
 .timer-display span {
+  color: #94a3b8;
   font-size: 14px;
-  color: #9ca3af;
   margin-top: 8px;
+}
+
+/* Timer status */
+.timer-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #94a3b8;
+  font-size: 14px;
+  margin: 8px 0 26px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Duration input */
+.duration-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.duration-input label {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.duration-input input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  background-color: #1e293b;
+  color: #f9fafb;
+  font-size: 16px;
+  outline: none;
+}
+
+.duration-input input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.duration-input input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Timer buttons */
+.timer-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.timer-controls button {
+  flex: 1;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.timer-controls button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.start-button {
+  background-color: #2563eb;
+}
+
+.start-button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.pause-button,
+.reset-button {
+  background-color: #273449;
+}
+
+.pause-button:hover:not(:disabled),
+.reset-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.timer-controls button:disabled {
+  background-color: #1e293b;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* Recent durations */
+.recent-durations {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #263244;
+}
+
+.recent-durations h3 {
+  margin: 0 0 14px;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.recent-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.recent-buttons button {
+  padding: 12px 6px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  color: #f9fafb;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.recent-buttons button:hover:not(:disabled) {
+  background-color: #334155;
+}
+
+.recent-buttons button.selected {
+  background-color: #1e3a8a;
+  border-color: #3b82f6;
+}
+
+.recent-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Sound preferences */
+.sound-settings {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.sound-settings label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sound-settings input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+/* Completion message */
+.completion-message {
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #22c55e;
+  background-color: #14532d;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.completion-message h3 {
+  color: #86efac;
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.completion-message p {
+  color: #dcfce7;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Footer */
+.app-footer {
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .app {
+    padding: 20px 12px;
+  }
+
+  .timer-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .timer-circle {
+    width: 250px;
+    height: 250px;
+  }
+
+  .timer-controls {
+    gap: 8px;
+  }
+
+  .timer-controls button {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .recent-buttons {
+    gap: 6px;
+  }
+
+  .recent-buttons button {
+    font-size: 12px;
+    padding: 11px 4px;
+  }
 }

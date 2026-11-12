@@ -327,114 +327,163 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Study Timer</h1>
-      <p>Stay focused, one session at a time.</p>
+      <main className="timer-card">
+        <header className="app-header">
+          <div className="header-icon">📖</div>
 
-      <div className="timer">
-        <div className="timer-circle">
-          <svg className="progress-ring" viewBox="0 0 220 220">
-            {/* Background circle */}
-            <circle
-              className="progress-ring-background"
-              cx="110"
-              cy="110"
-              r={radius}
-            />
+          <div className="header-text">
+            <h1>Study Timer</h1>
+            <p>Stay focused, one session at a time.</p>
+          </div>
+        </header>
 
-            {/* Colored progress circle */}
-            <circle
-              className="progress-ring-progress"
-              cx="110"
-              cy="110"
-              r={radius}
-              stroke={timerColor}
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-            />
-          </svg>
+        <div className="header-divider" />
 
-          <div className="timer-display">
-            <h2>{formatTime(timeLeft)}</h2>
-            <span>{Math.round(progress)}% remaining</span>
+        {/* Circular countdown timer */}
+        <div className="timer">
+          <div className="timer-circle">
+            <svg className="progress-ring" viewBox="0 0 220 220">
+              <circle
+                className="progress-ring-background"
+                cx="110"
+                cy="110"
+                r={radius}
+              />
+
+              <circle
+                className="progress-ring-progress"
+                cx="110"
+                cy="110"
+                r={radius}
+                stroke={timerColor}
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+              />
+            </svg>
+
+            <div className="timer-display">
+              <h2>{formatTime(timeLeft)}</h2>
+              <span>{Math.round(progress)}% remaining</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {isComplete && (
-        <div className="completion-message" role="status">
-          <h3>Study Session Complete!</h3>
-          <p>Great work! Your study session has finished.</p>
-        </div>
-      )}
-
-      <div className="duration-input">
-        <label htmlFor="duration">Study Duration (minutes)</label>
-
-        <input
-          id="duration"
-          type="number"
-          min="1"
-          max="1440"
-          step="1"
-          value={durationInput}
-          disabled={isRunning}
-          onChange={(e) => setDurationInput(e.target.value)}
-          onBlur={handleDurationSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.currentTarget.blur();
-            }
-          }}
-        />
-      </div>
-
-      {recentDurations.length > 0 && (
-        <div className="recent-durations">
-          <h3>Recent Durations</h3>
-
-          <div className="recent-buttons">
-            {recentDurations.map((minutes) => (
-              <button
-                key={minutes}
-                type="button"
-                disabled={isRunning}
-                onClick={() => handleDurationChange(minutes)}
-                className={duration === minutes ? "selected" : ""}
-              >
-                {minutes} min
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="timer-controls">
-        <button
-          onClick={handleStart}
-          disabled={
-            isRunning || (timeLeft <= 0 && durationInput === String(duration))
-          }
-        >
-          {" "}
-          {timeLeft < duration * 60 && timeLeft > 0 ? "Resume" : "Start"}
-        </button>
-
-        <button onClick={handlePause} disabled={!isRunning}>
-          Pause
-        </button>
-
-        <button onClick={handleReset}>Reset</button>
-      </div>
-      <div className="sound-settings">
-        <label>
-          <input
-            type="checkbox"
-            checked={soundEnabled}
-            onChange={(e) => setSoundEnabled(e.target.checked)}
+        {/* Timer status */}
+        <div className="timer-status">
+          <span
+            className="status-dot"
+            style={{
+              backgroundColor: isComplete
+                ? "#22c55e"
+                : isRunning
+                  ? timerColor
+                  : "#64748b",
+            }}
           />
-          Enable completion sound
-        </label>
-      </div>
+
+          <span>
+            {isComplete
+              ? "Session completed"
+              : isRunning
+                ? "Focus session in progress"
+                : timeLeft < duration * 60 && timeLeft > 0
+                  ? "Session paused"
+                  : "Ready to focus"}
+          </span>
+        </div>
+
+        {/* Completion notification */}
+        {isComplete && (
+          <div className="completion-message" role="status">
+            <h3>Study Session Complete!</h3>
+            <p>Great work! Your study session has finished.</p>
+          </div>
+        )}
+
+        {/* Duration selection */}
+        <div className="duration-input">
+          <label htmlFor="duration">Study Duration (minutes)</label>
+
+          <input
+            id="duration"
+            type="number"
+            min="1"
+            max="1440"
+            step="1"
+            value={durationInput}
+            disabled={isRunning}
+            onChange={(e) => setDurationInput(e.target.value)}
+            onBlur={handleDurationSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.currentTarget.blur();
+              }
+            }}
+          />
+        </div>
+
+        {/* Timer controls */}
+        <div className="timer-controls">
+          <button
+            className="start-button"
+            onClick={handleStart}
+            disabled={
+              isRunning || (timeLeft <= 0 && durationInput === String(duration))
+            }
+          >
+            {timeLeft < duration * 60 && timeLeft > 0 ? "Resume" : "Start"}
+          </button>
+
+          <button
+            className="pause-button"
+            onClick={handlePause}
+            disabled={!isRunning}
+          >
+            Pause
+          </button>
+
+          <button className="reset-button" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
+
+        {/* Recent durations */}
+        {recentDurations.length > 0 && (
+          <section className="recent-durations">
+            <h3>Recent Durations</h3>
+
+            <div className="recent-buttons">
+              {recentDurations.map((minutes) => (
+                <button
+                  key={minutes}
+                  type="button"
+                  disabled={isRunning}
+                  onClick={() => handleDurationChange(minutes)}
+                  className={duration === minutes ? "selected" : ""}
+                >
+                  {minutes} min
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Sound settings */}
+        <div className="sound-settings">
+          <label>
+            <input
+              type="checkbox"
+              checked={soundEnabled}
+              onChange={(e) => setSoundEnabled(e.target.checked)}
+            />
+            Enable completion sound
+          </label>
+        </div>
+      </main>
+
+      <footer className="app-footer">
+        Stay consistent. Every minute counts.
+      </footer>
     </div>
   );
 }
