@@ -27,31 +27,14 @@
 /* Header */
 .app-header {
   display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.header-icon {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background-color: #1d4ed8;
-  border-radius: 12px;
-  font-size: 24px;
 }
 
 .header-text h1 {
   margin: 0;
   font-size: 24px;
   color: #f9fafb;
-}
-
-.header-text p {
-  margin: 5px 0 0;
-  color: #94a3b8;
-  font-size: 13px;
+  text-align: center;
 }
 
 .header-divider {
@@ -291,6 +274,9 @@
 
 /* Completion message */
 .completion-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
   margin-bottom: 24px;
   border: 1px solid #22c55e;
@@ -302,20 +288,7 @@
 .completion-message h3 {
   color: #86efac;
   font-size: 18px;
-  margin: 0 0 8px;
-}
-
-.completion-message p {
-  color: #dcfce7;
-  font-size: 14px;
   margin: 0;
-}
-
-/* Footer */
-.app-footer {
-  color: #64748b;
-  font-size: 13px;
-  text-align: center;
 }
 
 /* Mobile responsiveness */

@@ -157,7 +157,7 @@ function App() {
 
   // Update the browser tab title when the timer finishes
   useEffect(() => {
-    document.title = isComplete ? "⏰ Study Session Complete!" : "Study Timer";
+    document.title = isComplete ? "Study Session Complete!" : "Study Timer";
 
     return () => {
       document.title = "Study Timer";
@@ -329,11 +329,8 @@ function App() {
     <div className="app">
       <main className="timer-card">
         <header className="app-header">
-          <div className="header-icon">📖</div>
-
           <div className="header-text">
             <h1>Study Timer</h1>
-            <p>Stay focused, one session at a time.</p>
           </div>
         </header>
 
@@ -396,7 +393,6 @@ function App() {
         {isComplete && (
           <div className="completion-message" role="status">
             <h3>Study Session Complete!</h3>
-            <p>Great work! Your study session has finished.</p>
           </div>
         )}
 
@@ -480,10 +476,6 @@ function App() {
           </label>
         </div>
       </main>
-
-      <footer className="app-footer">
-        Stay consistent. Every minute counts.
-      </footer>
     </div>
   );
 }
