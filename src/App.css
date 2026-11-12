@@ -43,7 +43,7 @@
   margin: 24px 0;
 }
 
-/* Timer */
+/* Circular timer */
 .timer {
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@
 }
 
 .timer-display h2 {
-  font-size: clamp(40px, 8vw, 56px);
+  font-size: clamp(32px, 7vw, 46px);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   margin: 0;
@@ -117,9 +117,10 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-/* Duration input */
+/* Hours / minutes / seconds input */
 .duration-input {
   display: flex;
   flex-direction: column;
@@ -127,34 +128,61 @@
   margin-bottom: 20px;
 }
 
-.duration-input label {
+.duration-heading {
+  margin: 0;
   color: #cbd5e1;
   font-size: 14px;
   font-weight: 500;
 }
 
-.duration-input input {
+.duration-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.duration-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.duration-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.duration-field input {
   width: 100%;
-  padding: 13px 14px;
+  padding: 13px 8px;
   border-radius: 10px;
   border: 1px solid #374151;
   background-color: #1e293b;
   color: #f9fafb;
   font-size: 16px;
+  text-align: center;
   outline: none;
 }
 
-.duration-input input:focus {
+.duration-field input:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-.duration-input input:disabled {
+.duration-field input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Timer buttons */
+.input-error {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+/* Timer controls */
 .timer-controls {
   display: flex;
   gap: 12px;
@@ -202,7 +230,7 @@
   cursor: not-allowed;
 }
 
-/* Recent durations */
+/* Recently used durations */
 .recent-durations {
   margin-top: 28px;
   padding-top: 24px;
@@ -225,13 +253,16 @@
 }
 
 .recent-buttons button {
-  padding: 12px 6px;
+  min-width: 0;
+  padding: 12px 4px;
   background-color: #1e293b;
   border: 1px solid #334155;
   border-radius: 10px;
   color: #f9fafb;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
   transition: background-color 0.2s;
 }
 
@@ -307,6 +338,10 @@
     height: 250px;
   }
 
+  .timer-display h2 {
+    font-size: clamp(28px, 7vw, 38px);
+  }
+
   .timer-controls {
     gap: 8px;
   }
@@ -316,12 +351,20 @@
     font-size: 14px;
   }
 
+  .duration-fields {
+    gap: 8px;
+  }
+
+  .duration-field input {
+    padding: 12px 4px;
+  }
+
   .recent-buttons {
     gap: 6px;
   }
 
   .recent-buttons button {
-    font-size: 12px;
-    padding: 11px 4px;
+    font-size: 10px;
+    padding: 11px 2px;
   }
 }
