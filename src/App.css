@@ -13,25 +13,13 @@
   gap: 24px;
 }
 
-/* Remove number input arrows/spinners */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
 /* Main timer card */
 .timer-card {
   width: 100%;
   max-width: 520px;
   padding: 32px;
-  background-color: #111827;
-  border: 1px solid #263244;
+  background-color: #13231d;
+  border: 1px solid #29443a;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
@@ -51,7 +39,7 @@ input[type="number"] {
 
 .header-divider {
   height: 1px;
-  background-color: #263244;
+  background-color: #29443a;
   margin: 24px 0;
 }
 
@@ -78,7 +66,7 @@ input[type="number"] {
 
 .progress-ring-background {
   fill: none;
-  stroke: #263244;
+  stroke: #29443a;
   stroke-width: 10;
 }
 
@@ -109,7 +97,7 @@ input[type="number"] {
 }
 
 .timer-display span {
-  color: #94a3b8;
+  color: #a2b8ae;
   font-size: 14px;
   margin-top: 8px;
 }
@@ -120,7 +108,7 @@ input[type="number"] {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  color: #94a3b8;
+  color: #a2b8ae;
   font-size: 14px;
   margin: 8px 0 26px;
 }
@@ -142,7 +130,7 @@ input[type="number"] {
 
 .duration-heading {
   margin: 0;
-  color: #cbd5e1;
+  color: #d4e5da;
   font-size: 14px;
   font-weight: 500;
 }
@@ -163,15 +151,15 @@ input[type="number"] {
 .duration-field label {
   font-size: 13px;
   font-weight: 500;
-  color: #94a3b8;
+  color: #a2b8ae;
 }
 
 .duration-field input {
   width: 100%;
   padding: 13px 8px;
   border-radius: 10px;
-  border: 1px solid #374151;
-  background-color: #1e293b;
+  border: 1px solid #29443a;
+  background-color: #1c3229;
   color: #f9fafb;
   font-size: 16px;
   text-align: center;
@@ -179,8 +167,8 @@ input[type="number"] {
 }
 
 .duration-field input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.17);
 }
 
 .duration-field input:disabled {
@@ -219,26 +207,35 @@ input[type="number"] {
 }
 
 .start-button {
-  background-color: #2563eb;
+  background-color: #059669;
 }
 
 .start-button:hover:not(:disabled) {
-  background-color: #1d4ed8;
+  background-color: #047857;
 }
 
-.pause-button,
+/* Pause button */
+.pause-button {
+  background-color: #273b32;
+}
+
+.pause-button:hover:not(:disabled) {
+  background-color: #345648;
+}
+
+/* Reset button */
 .reset-button {
-  background-color: #273449;
+  background-color: #b91c1c;
+  color: #ffffff;
 }
 
-.pause-button:hover:not(:disabled),
 .reset-button:hover:not(:disabled) {
-  background-color: #374151;
+  background-color: #dc2626;
 }
 
 .timer-controls button:disabled {
-  background-color: #1e293b;
-  color: #64748b;
+  background-color: #1c3229;
+  color: #91a99d;
   cursor: not-allowed;
 }
 
@@ -246,12 +243,12 @@ input[type="number"] {
 .recent-durations {
   margin-top: 28px;
   padding-top: 24px;
-  border-top: 1px solid #263244;
+  border-top: 1px solid #29443a;
 }
 
 .recent-durations h3 {
   margin: 0 0 14px;
-  color: #94a3b8;
+  color: #a2b8ae;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -267,8 +264,8 @@ input[type="number"] {
 .recent-buttons button {
   min-width: 0;
   padding: 12px 4px;
-  background-color: #1e293b;
-  border: 1px solid #334155;
+  background-color: #1c3229;
+  border: 1px solid #345648;
   border-radius: 10px;
   color: #f9fafb;
   cursor: pointer;
@@ -279,12 +276,12 @@ input[type="number"] {
 }
 
 .recent-buttons button:hover:not(:disabled) {
-  background-color: #334155;
+  background-color: #345648;
 }
 
 .recent-buttons button.selected {
-  background-color: #1e3a8a;
-  border-color: #3b82f6;
+  background-color: #175b43;
+  border-color: #10b981;
 }
 
 .recent-buttons button:disabled {
@@ -303,7 +300,7 @@ input[type="number"] {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #94a3b8;
+  color: #a2b8ae;
   font-size: 14px;
   cursor: pointer;
 }
@@ -311,7 +308,7 @@ input[type="number"] {
 .sound-settings input {
   width: 18px;
   height: 18px;
-  accent-color: #2563eb;
+  accent-color: #059669;
   cursor: pointer;
 }
 
@@ -381,9 +378,203 @@ input[type="number"] {
   }
 }
 
-/* Clear keyboard focus indicators */
+/* Hide native number-input spinners without changing numeric validation. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* Countdown / stopwatch mode selection */
+.mode-switcher {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  margin: 24px 0;
+  border-radius: 12px;
+  background: #1c3229;
+}
+.mode-button {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #a2b8ae;
+  cursor: pointer;
+  padding: 12px 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.mode-button:hover {
+  color: #f9fafb;
+}
+.mode-button.active {
+  color: #f9fafb;
+  background: #059669;
+}
+.mode-panel[hidden] {
+  display: none !important;
+}
+
+/* The stopwatch uses a dotted emerald ring rather than countdown progress. */
+.stopwatch-ring {
+  fill: none;
+  stroke: #10b981;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 7 13;
+}
+
 button:focus-visible,
 input:focus-visible {
-  outline: 2px solid #60a5fa;
+  outline: 2px solid #34d399;
   outline-offset: 3px;
+}
+
+/* Stopwatch lap controls and recorded splits */
+.stopwatch-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.stopwatch-controls button {
+  min-width: 0;
+  padding: 12px 5px;
+  font-size: 13px;
+}
+
+.lap-button {
+  background-color: #254238;
+}
+
+.lap-button:hover:not(:disabled) {
+  background-color: #29443a;
+}
+
+.stopwatch-laps {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #29443a;
+}
+
+.stopwatch-laps h3 {
+  margin: 0 0 14px;
+  color: #a2b8ae;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.lap-table-wrap {
+  max-height: 250px;
+  overflow: auto;
+}
+
+.lap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-table th,
+.lap-table td {
+  padding: 10px 6px;
+  border-bottom: 1px solid #29443a;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.lap-table th:first-child,
+.lap-table td:first-child {
+  text-align: left;
+}
+
+.lap-table thead th {
+  color: #a2b8ae;
+  font-weight: 600;
+}
+
+.lap-table tbody th {
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .stopwatch-controls {
+    gap: 6px;
+  }
+  .stopwatch-controls button {
+    font-size: 12px;
+    padding: 12px 3px;
+  }
+  .lap-table {
+    font-size: 12px;
+  }
+}
+
+/* Desktop two-column layout for both timing modes */
+.timer-card {
+  max-width: 940px;
+}
+
+.timer-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.timer-visual-column,
+.timer-actions-column {
+  min-width: 0;
+}
+
+.timer-visual-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-actions-column {
+  padding-top: 28px;
+}
+
+.timer-layout .timer-status {
+  margin-bottom: 12px;
+}
+
+.timer-layout .sound-settings {
+  padding-top: 12px;
+}
+
+.timer-layout .completion-message {
+  width: 100%;
+  margin: 12px 0 0;
+}
+
+.timer-layout .recent-durations,
+.timer-layout .stopwatch-laps {
+  margin-top: 24px;
+}
+
+/* Stack the columns for tablet and phone screens. */
+@media (max-width: 760px) {
+  .timer-card {
+    max-width: 520px;
+  }
+
+  .timer-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .timer-actions-column {
+    padding-top: 0;
+  }
 }
