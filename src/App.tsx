@@ -119,6 +119,20 @@ function App() {
 
   const endTimeRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Close the audio context when the component unmounts
+  useEffect(() => {
+    return () => {
+      const audioContext = audioContextRef.current;
+
+      if (audioContext && audioContext.state !== "closed") {
+        void audioContext.close().catch(console.error);
+      }
+
+      audioContextRef.current = null;
+    };
+  }, []);
+
   const soundEnabledRef = useRef(soundEnabled);
 
   useEffect(() => {
@@ -337,11 +351,14 @@ function App() {
                 strokeDashoffset={strokeDashoffset}
               />
             </svg>
-            <div className="timer-display">
-              <h2 aria-label={`${formatTime(timeLeft)} remaining`}>
-                {formatTime(timeLeft)}
-              </h2>
-              <span>{Math.round(progress)}% remaining</span>
+            <div
+              className="timer-display"
+              role="timer"
+              aria-label={`${formatTime(timeLeft)} remaining`}
+              aria-live="off"
+            >
+              <h2 aria-hidden="true">{formatTime(timeLeft)}</h2>
+              <span aria-hidden="true">{Math.round(progress)}% remaining</span>
             </div>
           </div>
         </div>
