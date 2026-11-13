@@ -14,6 +14,10 @@ The application features flexible countdown durations, a color coded progress in
 
 ![Stopwatch](screenshots/stopwatch.png)
 
+## Live Demo
+
+Try the application: [Study Timer](https://study-timer-ochre.vercel.app/)
+
 ## Features
 
 ### Countdown Timer
