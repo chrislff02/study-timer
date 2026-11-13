@@ -1,75 +1,93 @@
-# React + TypeScript + Vite
+# Study Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A customizable study timer built with React and TypeScript to help users manage focused study sessions.
 
-Currently, two official plugins are available:
+The application features flexible countdown durations, a color-coded progress indicator, reusable recent durations, and configurable completion notifications.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Custom Study Durations:** Set a countdown using hours, minutes, and seconds.
+- **Timer Controls:** Start, pause, resume, and reset study sessions.
+- **Visual Progress Indicator:** A circular countdown that changes color as time runs out:
+  - Green: More than 50% remaining
+  - Yellow: 15–50% remaining
+  - Red: 15% or less remaining
+- **Recent Durations:** Automatically remembers the four most recently used unique durations.
+- **Persistent Preferences:** Saves recent durations and sound settings using browser localStorage.
+- **Completion Alarm:** Plays an audible notification when the countdown reaches zero.
+- **Sound Controls:** Enable or disable the completion alarm.
+- **Completion Feedback:** Displays a completion message and updates the browser tab title.
+- **Responsive Interface:** Dark-themed layout designed for desktop and mobile devices.
+- **Accessibility:** Keyboard focus indicators and accessible timer status.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technologies Used
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- Vite
+- CSS
+- Web Audio API
+- Browser localStorage
+- Git and GitHub
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js and npm
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
 
-```
+1. Clone the repository:
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+   ```bash
+   git clone https://github.com/chrislff02/study-timer
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+2. Navigate into the project:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   ```bash
+   cd study-timer
+   ```
 
-```
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the local URL displayed in the terminal.
+
+## Available Commands
+
+| Command           | Description                          |
+| ----------------- | ------------------------------------ |
+| `npm run dev`     | Start the development server         |
+| `npm run build`   | Build the application for production |
+| `npm run preview` | Preview the production build         |
+| `npm run lint`    | Run ESLint                           |
+
+## How to Use
+
+1. Enter a study duration using the Hours, Minutes, and Seconds fields.
+2. Click **Start** to begin the countdown.
+3. Use **Pause**, **Resume**, or **Reset** to control the session.
+4. Watch the circular progress indicator change color as time decreases.
+5. When the timer reaches zero, a completion message appears and an alarm plays if sound is enabled.
+6. Select a previously used duration from the Recent Durations section to quickly start another session.
+
+## Project Highlights
+
+This project focuses on accurate countdown behavior, persistent browser storage, and a responsive user interface.
+
+The countdown uses a target completion timestamp to calculate the remaining time rather than relying solely on interval ticks. This reduces accumulated timing drift when users switch browser tabs.
+
+Recent durations are stored as seconds and maintained as a list of the four most recently used unique values.
+
+The application runs entirely in the browser and does not require a backend or database.
